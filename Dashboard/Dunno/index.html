@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Dunno</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css'><link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<div id="app">
+<div class="main bg-neutral-900 h-screen h-full sm:p-10 text-white">
+    <div class="chat-wrap h-full shadow-2xl p-19 sm:p-20"
+      :style="{
+        background: currentChat >= 0 ? 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(https://dsp-studio.ro/wp-content/bg'+currentChat+'.jpg)' : 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url(https://dsp-studio.ro/wp-content/bg0.jpg)'
+      }">
+      <div class="chat bg-neutral-900 sm:w-[900px] px-5">
+        <div class="px-5">
+          <h2 class="py-5 text-4xl font-bold flex justify-between items-center">Dunno<span :class="status" class="w-3 h-3 rounded-full block" title="Status"></span></a></h2>
+          <p class="text-neutral-400 border-t-2 border-neutral-800 pt-4 mb-10">Your communication partner..</p>
+        </div>
+        <div v-if="currentChatId === null" class="flex px-5">
+          <div class="topics sm:basis-1/2 cursor-pointer pr-5">
+            <div v-for="(bot, index) in chatbots" :key="index">
+              <div @click="selectChatBot(index)" :class="[currentChat === index ? 'bg-neutral-800' : '']" class="mb-2 flex items-center hover:bg-neutral-800 transition duration-300 px-3 py-2">
+                <div class="bg-neutral-800 h-10 w-10 p-4 rounded-full border border-neutral-400 flex items-center justify-center">
+                  <i :class="bot.font"></i>
+                </div>
+                <div class="ml-3 border-b-2 border-neutral-800 pb-2">
+                  <h3 class="text-xl font-bold">{{bot.name}}</h3>
+                  <p class="text-xs text-neutral-400">{{bot.desc}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="basis-1/2 pl-5 hidden sm:flex items-center ">
+            <div v-for="(bot, index) in chatbots" :key="index" class="absolute">
+              <transition name="fade">
+              <figure v-if="currentChat === index" class="relative max-w-sm transition-all duration-300">
+                <img class="rounded-xl" :src="getImage(index)" :key="index" alt="image description">
+              </figure>
+              </transition>
+            </div>
+          </div>
+        </div>
+        <div v-if="currentChatId === null" class="flex px-5 py-10">
+          <div class="basis-1/2">
+            <div class="border-2 border-neutral-800 rounded-xl mr-5 px-6 py-4 flex items-center text-neutral-400">
+              <span :class="[currentChat >= 0 ? 'bg-green-400' : 'bg-gray-400']" class="w-3 h-3 rounded-full block mr-5"></span>
+              <div @click="selectChatBot(-1)" v-if="currentChat >= 0" class="cursor-pointer">
+                {{chatbots[currentChat]['name']}}
+              </div>
+              <div v-if="currentChat < 0">
+                Select a ChatBot
+              </div>
+            </div>
+          </div>
+          <div class="basis-1/2">
+            <div v-if="currentChat >= 0" @click="startConversation" class="flex items-center justify-end border-2 border-neutral-800 hover:bg-neutral-800 transition-all duration-300 rounded-xl ml-5 px-6 py-4 text-right cursor-pointer text-neutral-400">
+              <div class="mr-5">
+                Start Conversation
+              </div>
+              <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="currentChatId != null" class="px-5 pb-10">
+          <small class="flex justify-between text-xs text-neutral-400 w-full text-end block mb-1"><span>chat id: {{currentChatId}}</span> <button class="hover:text-sky-500" @click="downloadChatTranscript"><i class="fa-solid fa-file-arrow-down"></i> Download chat transcript</button></small>
+          <div class="cont">
+          <div class="w-full h-96 border border-neutral-800 mb-10 relative p-5 overflow-auto">
+            <p v-for="(chat, index) in chatObject.chat" :class="index % 2 === 0 ? 'text-sky-500' : ''" class="mb-5">
+              <span v-if="index % 2 === 0"><strong>ChatBot: </strong> {{chat}}</span>
+              <span v-if="index % 2 !== 0"><strong>You:</strong> {{chat}}</span>
+            </p>
+            <div v-if="isChatDisabled" class="text-sky-500"><i class="fa fa-refresh fa-spin"></i></div>
+          </div>
+            </div>
+          <form @submit.prevent="onSubmit">
+            <div class="relative">
+              <input name="chat" type="text" :disabled="isChatDisabled" class="pl-5 pr-14 focus:outline-none focus:ring focus:ring-sky-500 bg-neutral-900 border border-neutral-800 h-14 rounded-xl w-full" :placeholder="[isChatDisabled ? 'Waiting for response...' : 'Type a question for the chat bot to answer.']">
+              <button :disabled="isChatDisabled" class="absolute right-0 top-0 h-14 w-16 bg-sky-500 block rounded-r-xl" type="submit" @click="mySubmitMethod">Send</button>
+            </div>
+          </form>
+
+
+        </div>
+
+      </div>
+  </div>
+</div>
+</div>
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+input:disabled {
+  cursor: progress;
+}
+button:disabled {
+  cursor:no-drop;
+}
+
+</style>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.37/vue.global.prod.min.js'></script>
+<script src='https://cdn.tailwindcss.com'></script>
+<script src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'></script><script  src="./script.js"></script>
+
+</body>
+</html>

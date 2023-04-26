@@ -1,0 +1,40 @@
+body,html, #app {
+  height:100%
+}
+.chat-wrap {
+/* background: linear-gradient(
+  rgba(0, 0, 0, 0.5), 
+  rgba(0, 0, 0, 0.5)
+),url('https://dsp-studio.ro/wp-content/bg0.jpg');   */
+  background-position: center center!important;
+  background-repeat: no-repeat!important;
+  background-size: cover!important;
+  background-color: black!important;
+  transition: background 0.1s step-end;
+
+
+}
+.chat {
+  -webkit-box-shadow: 0px 30px 20px -10px rgba(0,0,0,0.7); 
+  box-shadow: 0px 30px 20px -10px rgba(0,0,0,0.7);
+}
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgb(38 38 38);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(14 165 233);
+  background-clip: content-box;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

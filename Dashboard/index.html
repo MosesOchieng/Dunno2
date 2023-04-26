@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>Call Center Operational Dashboard</title>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Call Center Operational Dashboard</title>
     <link
       href="https://fonts.googleapis.com/css2?family=EB+Garamond&family=Open+Sans:wght@300;600&display=swap"
       rel="stylesheet"
@@ -14,231 +14,244 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
-  <link rel="stylesheet" href="./style.css">
-
-</head>
-<body>
-<!-- partial:index.partial.html -->
-<div class="cc-ops-contents">
-  <div id="sidebar" class="sidebar">
-    <div class="sidebar-top">
-      <div class="logo">
-        <img src="https://i.ibb.co/ryKx27b/logo.png" alt="logo" />
-      </div>
-      <span class="divider"></span>
-      <span class="sidebar-text">Report</span>
-      <div class="sidebar-icon active">
-        <i class="fa-solid fa-house"></i>
-      </div>
-      <div class="sidebar-icon">
-        <i class="fa-solid fa-people-group"></i>
-      </div>
-    </div>
-    <div class="sidebar-bottom">
-      <span class="sidebar-text">info</span>
-      <div id="infoIcon" class="sidebar-icon">
-        <i id="iIcon" class="fa-solid fa-circle-info"></i>
-        <div id="infoTooltip">
-          <p>
-            Dashboard design adapted from
-            <a href="https://public.tableau.com/views/SpendAnalyticsDashboard_16667357420150/VendorDetail?%3Adisplay_static_image=y&%3Aembed=true&%3Aembed=y&%3Alanguage=en-GB&%3AshowVizHome=n&%3AapiID=host0#navType=0&navSrc=Parse">Pradeep Kumar G</a>'s take on a default Tableau exchange visualisation.
-          </p>
-          <p>Coded in HTML, CSS & Javascript by eye and from scratch.</p>
-        </div>
-      </div>
-
-      <span class="divider"></span>
-      <span class="sidebar-text">follow</span>
-      <div class="sidebar-icon">
-        <a target="_blank" href="https://lewpbrown.com"><i class="fa-solid fa-globe"></i></a>
-      </div>
-
-      <div class="sidebar-icon">
-        <a target="_blank" href="https://codepen.io/lewpbrown"><i class="fa-brands fa-codepen"></i></a>
-      </div>
-    </div>
-  </div>
-
-  <div id="mainCharts" class="charts">
-    <div class="charts-header">
-      <div class="super-title title">Call Center Operations</div>
-      <div class="page-title title">Dashboard</div>
-      <div class="subtitle title">
-        <span id="datetime"><strong></strong></span>
-        <script>
-          const datetimeElement = document.getElementById("datetime");
-          const updateDateTime = () => {
-          const now = new Date();
-          const dateStr = now.toLocaleDateString();
-          const timeStr = now.toLocaleTimeString();
-          datetimeElement.textContent = `${dateStr} ${timeStr}`;
-          };
-          updateDateTime();
-          setInterval(updateDateTime, 1000);
-        </script>
-      </div>
-    </div>
-
-    <div class="top-row row">
-      <div class="top-chart segment">
-        <div class="chart-title title">Calls Received</div>
-        <div class="chart-icon">
-          <i class="fa-solid fa-hashtag"></i>
-        </div>
-        <div class="chart-main">3,695</div>
-        <div class="chart-subtitle">-5% vs Dec-21</div>
-        <canvas id="callVolumes"></canvas>
-      </div>
-
-      <div class="top-chart segment">
-        <div class="chart-title title">Average Speed to Answer</div>
-        <div class="chart-icon">
-          <i class="fa-solid fa-stopwatch"></i>
-        </div>
-        <div class="chart-main">1:08</div>
-        <div class="chart-subtitle">+7% vs Dec-21</div>
-        <canvas id="ASA"></canvas>
-      </div>
-
-      <div class="top-chart segment">
-        <div class="chart-title title">Average Handle Time</div>
-        <div class="chart-icon">
-          <i class="fa-regular fa-clock"></i>
-        </div>
-        <div class="chart-main">4:19</div>
-        <div class="chart-subtitle">-5% vs Dec-21</div>
-        <canvas id="AHT"></canvas>
-      </div>
-
-      <div class="top-chart segment">
-        <div class="chart-title title">Call Abandonment Rate</div>
-        <div class="chart-icon">
-          <i class="fa-solid fa-dumpster-fire"></i>
-        </div>
-        <div class="chart-main">7.4%</div>
-        <div class="chart-subtitle">-5% vs Dec-21</div>
-        <canvas id="callAbandonment"></canvas>
-      </div>
-    </div>
-
-    <div class="mid-row row">
-      <div class="mid-chart segment customer-recovery">
-        <div class="chart-icon">
-          <i class="fa-solid fa-dollar-sign"></i>
-        </div>
-        <div class="chart-title title">Customer Recovery Cost</div>
-        <canvas id="recoveryCost"></canvas>
-      </div>
-
-      <div class="mid-chart segment call-origin">
-        <div class="chart-icon">
-          <i class="fa-solid fa-location-pin"></i>
-        </div>
-        <div class="chart-title title">Calls by Origin State</div>
-        <div id="map"></div>
-      </div>
-    </div>
-
-    <div class="bottom-row row">
-      <div class="bottom-chart segment call-type">
-        <div class="chart-title title">Calls Received by Type</div>
-        <div class="chart-icon">
-          <i class="fa-solid fa-filter"></i>
-        </div>
-        <canvas id="callType"></canvas>
-      </div>
-
-      <div class="bottom-chart segment">
-        <div class="chart-title title">Social Media Presence</div>
-        <div class="chart-icon">
-          <i class="fa-regular fa-thumbs-up"></i>
-        </div>
-        <canvas id="socialMedia"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <div id="agentCharts">
-    <div class="charts-header">
-      <div class="header-left">
-        <div class="super-title title">Call Center Operations</div>
-        <div class="page-title title">Agent Performace</div>
-        <div class="subtitle title">
-          <span id="currentMonth"><strong>As of Last Full Shift</strong></span>
-        </div>
-      </div>
-      <div class="header-right">
-        <select name="agent-select" id="agentSelect">
-          <option value="">--Select an Agent--</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="agent-top agent-segment">
-      <div class="a-top top-one">
-        <div class="agent-name">
-          <i class="fa-solid fa-user"></i>
-          <span id="agentName">Select an Agent</span>
-        </div>
-
-        <div class="tenure">
-          <span>Agent for </span><span id="tenureValue">--</span>
-        </div>
-
-        <div class="recruited">
-          <span>Recruited in</span>
-          <span id="recruitedValue">--</span>
-        </div>
-
-        <div class="ranking">
-          <span>This agent ranks <span id="rankValue">--</span> overall, in the
-            team of 20.</span>
-        </div>
-      </div>
-
-      <div class="a-divider"></div>
-
-      <div class="a-top top-two">
-        <div class="chart-title title">Total Spend</div>
-        <div class="a-spend">
-          <div class="spend-container">
-            <span id="spendValue">$--</span>
-            <div class="spend-value-sub">+4.5% vs Dec 2021</div>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- partial:index.partial.html -->
+    <div class="cc-ops-contents">
+      <div id="sidebar" class="sidebar">
+        <div class="sidebar-top">
+          <div class="logo">
+            <img src="https://i.ibb.co/ryKx27b/logo.png" alt="logo" />
           </div>
-          <div class="percent-container">
-            <div class="spend-rank">
-              This agent accounts for <span id="spendPercent">--%</span> of
-              the team's total recovery spend.
+          <span class="divider"></span>
+          <span class="sidebar-text">Report</span>
+          <div class="sidebar-icon active">
+            <i class="fa-solid fa-house"></i>
+          </div>
+          <div class="sidebar-icon">
+            <i class="fa-solid fa-people-group"></i>
+          </div>
+        </div>
+        <div class="sidebar-bottom">
+          <span class="sidebar-text">info</span>
+          <div id="infoIcon" class="sidebar-icon">
+            <i id="iIcon" class="fa-solid fa-circle-info"></i>
+            <div id="infoTooltip">
+              <p>
+                Dashboard design adapted from
+                <a
+                  href="https://public.tableau.com/views/SpendAnalyticsDashboard_16667357420150/VendorDetail?%3Adisplay_static_image=y&%3Aembed=true&%3Aembed=y&%3Alanguage=en-GB&%3AshowVizHome=n&%3AapiID=host0#navType=0&navSrc=Parse"
+                  >Pradeep Kumar G</a
+                >'s take on a default Tableau exchange visualisation.
+              </p>
+              <p>Coded in HTML, CSS & Javascript by eye and from scratch.</p>
             </div>
-            <div id="progressBar">
-              <div id="progressBarContent" style="width: 0%"></div>
-            </div>
+          </div>
+
+          <span class="divider"></span>
+          <span class="sidebar-text">follow</span>
+          <div class="sidebar-icon">
+            <a target="_blank" href="https://lewpbrown.com"
+              ><i class="fa-solid fa-globe"></i
+            ></a>
+          </div>
+
+          <div class="sidebar-icon">
+            <a target="_blank" href="https://codepen.io/lewpbrown"
+              ><i class="fa-brands fa-codepen"></i
+            ></a>
           </div>
         </div>
       </div>
 
-      <div class="a-divider"></div>
-      <div class="a-top top-three">
-        <div class="chart-title title">Monthly Total Spend</div>
-        <div>
-          <canvas id="agentMonthlySpend"></canvas>
+      <div id="mainCharts" class="charts">
+        <div class="charts-header">
+          <div class="super-title title">Call Center Operations</div>
+          <div class="page-title title">Dashboard</div>
+          <div style="position: absolute; left: 700px">
+            <button>Call Center Press</button>
+          </div>
+          <div class="subtitle title">
+            <span id="datetime"><strong></strong></span>
+            <script>
+              const datetimeElement = document.getElementById("datetime");
+              const updateDateTime = () => {
+                const now = new Date();
+                const dateStr = now.toLocaleDateString();
+                const timeStr = now.toLocaleTimeString();
+                datetimeElement.textContent = `${dateStr} ${timeStr}`;
+              };
+              updateDateTime();
+              setInterval(updateDateTime, 1000);
+            </script>
+          </div>
+        </div>
+
+        <div class="top-row row">
+          <div class="top-chart segment">
+            <div class="chart-title title">Calls Received</div>
+            <div class="chart-icon">
+              <i class="fa-solid fa-hashtag"></i>
+            </div>
+            <div class="chart-main">3,695</div>
+            <div class="chart-subtitle">-5% vs Dec-21</div>
+            <canvas id="callVolumes"></canvas>
+          </div>
+
+          <div class="top-chart segment">
+            <div class="chart-title title">Average Speed to Answer</div>
+            <div class="chart-icon">
+              <i class="fa-solid fa-stopwatch"></i>
+            </div>
+            <div class="chart-main">1:08</div>
+            <div class="chart-subtitle">+7% vs Dec-21</div>
+            <canvas id="ASA"></canvas>
+          </div>
+
+          <div class="top-chart segment">
+            <div class="chart-title title">Average Handle Time</div>
+            <div class="chart-icon">
+              <i class="fa-regular fa-clock"></i>
+            </div>
+            <div class="chart-main">4:19</div>
+            <div class="chart-subtitle">-5% vs Dec-21</div>
+            <canvas id="AHT"></canvas>
+          </div>
+
+          <div class="top-chart segment">
+            <div class="chart-title title">Call Abandonment Rate</div>
+            <div class="chart-icon">
+              <i class="fa-solid fa-dumpster-fire"></i>
+            </div>
+            <div class="chart-main">7.4%</div>
+            <div class="chart-subtitle">-5% vs Dec-21</div>
+            <canvas id="callAbandonment"></canvas>
+          </div>
+        </div>
+
+        <div class="mid-row row">
+          <div class="mid-chart segment customer-recovery">
+            <div class="chart-icon">
+              <i class="fa-solid fa-dollar-sign"></i>
+            </div>
+            <div class="chart-title title">Customer Recovery Cost</div>
+            <canvas id="recoveryCost"></canvas>
+          </div>
+
+          <div class="mid-chart segment call-origin">
+            <div class="chart-icon">
+              <i class="fa-solid fa-location-pin"></i>
+            </div>
+            <div class="chart-title title">Calls by Origin State</div>
+            <div id="map"></div>
+          </div>
+        </div>
+
+        <div class="bottom-row row">
+          <div class="bottom-chart segment call-type">
+            <div class="chart-title title">Calls Received by Type</div>
+            <div class="chart-icon">
+              <i class="fa-solid fa-filter"></i>
+            </div>
+            <canvas id="callType"></canvas>
+          </div>
+
+          <div class="bottom-chart segment">
+            <div class="chart-title title">Social Media Presence</div>
+            <div class="chart-icon">
+              <i class="fa-regular fa-thumbs-up"></i>
+            </div>
+            <canvas id="socialMedia"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div id="agentCharts">
+        <div class="charts-header">
+          <div class="header-left">
+            <div class="super-title title">Call Center Operations</div>
+            <div class="page-title title">Agent Performace</div>
+            <div class="subtitle title">
+              <span id="currentMonth"
+                ><strong>As of Last Full Shift</strong></span
+              >
+            </div>
+          </div>
+          <div class="header-right">
+            <select name="agent-select" id="agentSelect">
+              <option value="">--Select an Agent--</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="agent-top agent-segment">
+          <div class="a-top top-one">
+            <div class="agent-name">
+              <i class="fa-solid fa-user"></i>
+              <span id="agentName">Select an Agent</span>
+            </div>
+
+            <div class="tenure">
+              <span>Agent for </span><span id="tenureValue">--</span>
+            </div>
+
+            <div class="recruited">
+              <span>Recruited in</span>
+              <span id="recruitedValue">--</span>
+            </div>
+
+            <div class="ranking">
+              <span
+                >This agent ranks <span id="rankValue">--</span> overall, in the
+                team of 20.</span
+              >
+            </div>
+          </div>
+
+          <div class="a-divider"></div>
+
+          <div class="a-top top-two">
+            <div class="chart-title title">Total Spend</div>
+            <div class="a-spend">
+              <div class="spend-container">
+                <span id="spendValue">$--</span>
+                <div class="spend-value-sub">+4.5% vs Dec 2021</div>
+              </div>
+              <div class="percent-container">
+                <div class="spend-rank">
+                  This agent accounts for <span id="spendPercent">--%</span> of
+                  the team's total recovery spend.
+                </div>
+                <div id="progressBar">
+                  <div id="progressBarContent" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="a-divider"></div>
+          <div class="a-top top-three">
+            <div class="chart-title title">Monthly Total Spend</div>
+            <div>
+              <canvas id="agentMonthlySpend"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="agent-bottom agent-segment">
+          <div class="chart-title title">Agent Closures by Category</div>
+
+          <canvas id="closureCategories"></canvas>
         </div>
       </div>
     </div>
-
-    <div class="agent-bottom agent-segment">
-      <div class="chart-title title">Agent Closures by Category</div>
-
-      <canvas id="closureCategories"></canvas>
-    </div>
-  </div>
-</div>
-<!-- partial -->
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js'></script>
-<script src='https://cdn.anychart.com/releases/8.11.0/js/anychart-core.min.js'></script>
-<script src='https://cdn.anychart.com/releases/8.11.0/js/anychart-map.min.js'></script>
-<script src='https://cdn.anychart.com/geodata/2.1.1/countries/australia/australia.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js'></script><script  src="./script.js"></script>
-
-</body>
+    <!-- partial -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-map.min.js"></script>
+    <script src="https://cdn.anychart.com/geodata/2.1.1/countries/australia/australia.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.15/proj4.js"></script>
+    <script src="./script.js"></script>
+  </body>
 </html>
